@@ -207,3 +207,145 @@ CASE
 END
     FROM TRIANGLES;
 ```
+
+22. Query a count of the number of cities in CITY having a Population larger than 100000.
+
+```sql
+SELECT COUNT(NAME)
+FROM CITY
+WHERE POPULATION > 100000;
+```
+
+23. Query the total population of all cities in CITY where District is California.
+
+```sql
+SELECT SUM(POPULATION)
+FROM CITY
+WHERE DISTRICT = 'California'
+```
+
+
+24.Query the average population of all cities in CITY where District is California.
+
+```sql
+SELECT AVG(POPULATION)
+FROM CITY
+WHERE DISTRICT = 'California';
+```
+
+
+25. Query the average population for all cities in CITY, rounded down to the nearest integer.
+
+```sql
+SELECT FLOOR(AVG(POPULATION))
+FROM CITY;
+```
+
+26. Query the sum of the populations for all Japanese cities in CITY. The COUNTRYCODE for Japan is JPN.
+
+```sql
+SELECT SUM(POPULATION)
+FROM CITY
+WHERE COUNTRYCODE = 'JPN';
+```
+
+27. Query the difference between the maximum and minimum populations in CITY.
+
+```sql
+SELECT (MAX(POPULATION) - MIN(POPULATION))
+FROM CITY;
+```
+
+28. We define an employee's total earnings to be their monthly SALARY * MONTHS worked, and the maximum total earnings to be the maximum total earnings for any employee in the Employee table. Write a query to find the maximum total earnings for all employees as well as the total number of employees who have maximum total earnings $2000. Then print these values as  space-separated integers.
+```sql
+SELECT MAX(SALARY * MONTHS) AS SALARY, COUNT(*)
+FROM EMPLOYEE
+GROUP BY SALARY
+ORDER BY SALARY DESC
+LIMIT 1;
+```
+
+29. Query the following two values from the STATION table:
+The sum of all values in LAT_N rounded to a scale of  decimal places.
+The sum of all values in LONG_W rounded to a scale of  decimal places.
+```sql
+SELECT ROUND(SUM(LAT_N),2), ROUND(SUM(LONG_W),2)
+FROM STATION;
+```
+
+30. Query the sum of Northern Latitudes (LAT_N) from STATION having values greater than 38.7880 and less than 137.2345 . Truncate your answer to  decimal places.
+
+```sql
+SELECT ROUND(SUM(LAT_N),4)
+FROM STATION
+WHERE LAT_N BETWEEN 38.7880 AND 137.2345
+```
+
+31. Query the greatest value of the Northern Latitudes (LAT_N) from STATION that is less than 137.2345. Truncate your answer to 4  decimal places.
+
+```sql
+SELECT ROUND(MAX(LAT_N),4)
+FROM STATION
+WHERE LAT_N < 137.2345
+```
+
+32. Query the Western Longitude (LONG_W) for the largest Northern Latitude (LAT_N) in STATION that is less than 137.2345 . Round your answer to 4 decimal places.
+
+```sql
+SELECT ROUND(MAX(LAT_N),4)
+FROM STATION
+WHERE LAT_N < 137.2345
+```
+
+33. Query the smallest Northern Latitude (LAT_N) from STATION that is greater than 38.7880 . Round your answer to 4 decimal places.
+
+```sql
+SELECT ROUND(MIN(LAT_N),4)
+FROM STATION
+WHERE LAT_N > 38.7780;
+```
+
+34.   Query the Western Longitude (LONG_W)where the smallest Northern Latitude (LAT_N) in STATION is greater than 38.7780 . Round your answer to 4 decimal places.
+
+```sql
+SELECT ROUND(LONG_W,4)
+FROM STATION
+WHERE LAT_N IN(SELECT MIN(LAT_N)
+      		FROM STATION 
+      		WHERE LAT_N > 38.7780);
+```
+
+35.Given the CITY and COUNTRY tables, query the sum of the populations of all cities where the CONTINENT is 'Asia'.
+
+```sql
+SELECT SUM(CITY.POPULATION)
+FROM CITY
+JOIN COUNTRY ON CITY.COUNTRYCODE = COUNTRY.CODE
+WHERE CONTINENT = 'Asia'
+```
+
+36.Given the CITY and COUNTRY tables, query the names of all cities where the CONTINENT is 'Africa'.
+
+```sql
+SELECT CITY.NAME
+FROM CITY
+JOIN COUNTRY ON CITY.COUNTRYCODE = COUNTRY.CODE
+WHERE CONTINENT ='Africa'
+```
+
+37. Given the CITY and COUNTRY tables, query the names of all the continents (COUNTRY.Continent) and their respective average city populations (CITY.Population) rounded down to the nearest integer.
+
+```sql
+SELECT COUNTRY.CONTINENT, FLOOR(AVG(CITY.POPULATION))
+FROM CITY 
+JOIN COUNTRY ON CITY.COUNTRYCODE = COUNTRY.CODE
+GROUP BY CONTINENT
+```
+
+38.Samantha was tasked with calculating the average monthly salaries for all employees in the EMPLOYEES table, but did not realize her keyboard's  key was broken until after completing the calculation. She wants your help finding the difference between her miscalculation (using salaries with any zeros removed), and the actual average salary.
+Write a query calculating the amount of error (i.e.:  average monthly salaries), and round it up to the next integer.
+
+```sql
+SELECT CEIL(AVG(SALARY) - AVG(REPLACE(SALARY, '0','')))
+FROM EMPLOYEES;
+```
